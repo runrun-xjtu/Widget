@@ -7,20 +7,42 @@ import re
 import requests
 import json
 
+ipv4_flag = 1  # 是否开启ipv4 ddns解析,1为开启，0为关闭
+ipv6_flag = 0  # 是否开启ipv6 ddns解析,1为开启，0为关闭
+accessKeyId = "************"  # 将accessKeyId改成自己的accessKeyId
+accessSecret = "************"  # 将accessSecret改成自己的accessSecret
+domain = "***.com"  # 你的主域名
+name_ipv4 = "ipv4"  # 要进行ipv4 ddns解析的子域名
+name_ipv6 = "ipv6"  # 要进行ipv6 ddns解析的子域名
+
+data =  {
+'__TOKEN__': 'www.oray.com',
+'password': '*********'   # 路由器登陆密码
+}
+
+url1 = "http://10.168.1.1/cgi-bin/oraybox_login"
+headers1 =  {
+'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+'Accept-Encoding': 'gzip, deflate',
+'Accept-Language': 'zh-CN,zh;q=0.9',
+'Cache-Control': 'max-age=0',
+'Connection': 'keep-alive',
+'Content-Length': '41',
+'Content-Type': 'application/x-www-form-urlencoded',
+'Cookie': 'session_id=100001',
+'Host': '10.168.1.1',
+'Origin': 'http://10.168.1.1',
+'Referer': 'http://10.168.1.1/oraybox/login.html',
+'Upgrade-Insecure-Requests': '1',
+'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+}
+
 url = "http://10.168.1.1/cgi-bin/oraybox?_api=sys_base_info" # ip一般是 10.168.1.1
 headers = {'Cookie': 'session_id=100001'}
 r = requests.get(url,headers=headers)
 n1 = re.findall(r"wan_ip(.+?)}", r.text)
 n2 = str(n1)
 n3 = n2.split("\"")[2]
-
-ipv4_flag = 1  # 是否开启ipv4 ddns解析,1为开启，0为关闭
-ipv6_flag = 0  # 是否开启ipv6 ddns解析,1为开启，0为关闭
-accessKeyId = "************"  # 将accessKeyId改成自己的accessKeyId
-accessSecret = "************"  # 将accessSecret改成自己的accessSecret
-domain = "abc.com"  # 你的主域名
-name_ipv4 = "ipv4"  # 要进行ipv4 ddns解析的子域名
-name_ipv6 = "ipv6"  # 要进行ipv6 ddns解析的子域名
 
 client = AcsClient(accessKeyId, accessSecret, 'cn-hangzhou')
 def update(RecordId, RR, Type, Value):  # 修改域名解析记录
